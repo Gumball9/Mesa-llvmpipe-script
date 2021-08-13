@@ -16,7 +16,7 @@ sudo pip3 install meson bison flex -y
 
 #Downloading mesa
 
-https://archive.mesa3d.org//mesa-21.2.0.tar.xz
+wget https://archive.mesa3d.org//mesa-21.2.0.tar.xz
 tar -xf mesa-21.2.0.tar.xz
 
 #Building mesa
