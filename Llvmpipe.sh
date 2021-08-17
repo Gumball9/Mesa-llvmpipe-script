@@ -1,38 +1,33 @@
-sudo apt update && apt upgrade -y
-sudo apt install wget -y
+#!/usr/bin/env bash
 
-#Editing sources.list
+# * stage:1 uncomment sources repo and get build dependencies
 sudo sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list
-sudo apt update && apt upgrade -y
-
-#Installing Dependencies
+sudo apt update
 sudo apt build-dep mesa -y
-sudo apt build-dep llvm -y
-sudo apt install llvm-12 -y
-sudo apt install libvulkan-dev -y
-sudo apt install python python3 python3-mako python3-pip -y
-sudo apt install build-essential -y
-sudo pip3 install meson bison flex -y
 
-#Downloading mesa
+# * stage 2 get dependencies
+dependencies="llvm-12 libvulkan-dev -y python python3 python3-mako python3-pip build-essential meson bison flex"
+sudo apt install "${dependencies}" -y
 
+# * stage 3 Download and build mesa llvm
 wget https://archive.mesa3d.org//mesa-21.2.0.tar.xz
 tar -xf mesa-21.2.0.tar.xz
 
-#Building mesa
+# building
 
-cd mesa-21.2.0
-mkdir build && cd build
-meson build
-ninja
+cd mesa-21.2.0 || {
+    echo "failed to do cd"
+    exit 1
+}
+ mkdir build
+ cd build || {
+    echo "failed to do cd"
+    exit 1
+}
+
+meson build ../
 sudo ninja install
-clear
 
 echo "Done"
 
-
-
-#checking mesa version
-
 glxinfo | grep Mesa
-
